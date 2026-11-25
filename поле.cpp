@@ -68,3 +68,50 @@ const std::vector<EventCell> g_events = {
     { 71, "Пропуск хода", false },
     { 90, "Ещё ход",      true  },
 };
+// Скруглённый прямоугольник из ConvexShape (выпуклая фигура — подходит).
+sf::ConvexShape roundedRect(sf::Vector2f size, float radius, unsigned per = 8)
+{
+    sf::ConvexShape shape;
+    shape.setPointCount(per * 4);
+    float w = size.x, h = size.y;
+    radius = std::min(radius, std::min(w, h) * 0.49f);
+    const sf::Vector2f centers[4] = {
+        { radius, radius }, { w - radius, radius },
+        { w - radius, h - radius }, { radius, h - radius }
+    };
+    const float startAngle[4] = { 180.f, 270.f, 0.f, 90.f };
+    unsigned idx = 0;
+    for (int c = 0; c < 4; ++c)
+        for (unsigned k = 0; k < per; ++k)
+        {
+            float a = (startAngle[c] + 90.f * float(k) / per) * PI / 180.f;
+            shape.setPoint(idx++, { centers[c].x + radius * std::cos(a),
+                                    centers[c].y + radius * std::sin(a) });
+        }
+    return shape;
+}
+
+void drawThickLine(sf::RenderWindow& w, sf::Vector2f a, sf::Vector2f b,
+                   float thickness, sf::Color col)
+{
+    sf::Vector2f d = b - a;
+    float len = std::hypot(d.x, d.y);
+    if (len < 0.001f) return;
+    float ang = std::atan2(d.y, d.x) * 180.f / PI;
+    sf::RectangleShape r(sf::Vector2f(len, thickness));
+    r.setOrigin(0, thickness / 2.f);
+    r.setPosition(a);
+    r.setRotation(ang);
+    r.setFillColor(col);
+    w.draw(r);
+}
+
+void drawBackground(sf::RenderWindow& w)
+{
+    sf::VertexArray va(sf::PrimitiveType::TrianglesStrip, 4);
+    va[0] = sf::Vertex({ 0, 0 }, BG_TOP);
+    va[1] = sf::Vertex({ 0, WINDOW_H }, BG_BOTTOM);
+    va[2] = sf::Vertex({ WINDOW_W, 0 }, BG_TOP);
+    va[3] = sf::Vertex({ WINDOW_W, WINDOW_H }, BG_BOTTOM);
+    w.draw(va);
+}
