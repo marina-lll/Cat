@@ -68,7 +68,7 @@ const std::vector<EventCell> g_events = {
     { 71, "Пропуск хода", false },
     { 90, "Ещё ход",      true  },
 };
-// Скруглённый прямоугольник из ConvexShape (выпуклая фигура — подходит).
+// Скруглённый прямоугольник 
 sf::ConvexShape roundedRect(sf::Vector2f size, float radius, unsigned per = 8)
 {
     sf::ConvexShape shape;
