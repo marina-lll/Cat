@@ -34,3 +34,37 @@ sf::String toSfString(const std::string& s)
 {
     return sf::String::fromUtf8(s.begin(), s.end());
 }
+// Описание поля
+struct Transition
+{
+    int  from;
+    int  to;
+    bool up;
+};
+
+struct EventCell
+{
+    int         cell;
+    std::string desc;
+    bool        extra;   // true = «Ещё ход», false = «Пропуск хода»
+};
+
+const std::vector<Transition> g_transitions = {
+    {  3, 22, true },
+    {  8, 30, true },
+    { 28, 84, true },
+    { 58, 77, true },
+    { 95, 75, false },
+    { 88, 24, false },
+    { 62, 18, false },
+    { 49, 11, false },
+    { 36,  6, false },
+    { 21,  9, false },
+};
+
+const std::vector<EventCell> g_events = {
+    { 12, "Пропуск хода", false },
+    { 47, "Ещё ход",      true  },
+    { 71, "Пропуск хода", false },
+    { 90, "Ещё ход",      true  },
+};
