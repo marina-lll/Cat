@@ -75,3 +75,31 @@ void drawSnake(sf::RenderWindow& w, sf::Vector2f head, sf::Vector2f tail)
         c.setFillColor(SNAKE_BODY);
         w.draw(c);
     }
+ // Голова
+    sf::CircleShape headShape(15.f);
+    headShape.setOrigin(15.f, 15.f);
+    headShape.setPosition(pts[0]);
+    headShape.setFillColor(SNAKE_DARK);
+    w.draw(headShape);
+    headShape.setRadius(12.f);
+    headShape.setOrigin(12.f, 12.f);
+    headShape.setPosition(pts[0] + u * 2.f);
+    headShape.setFillColor(SNAKE_BODY);
+    w.draw(headShape);
+
+    // Глаз
+    sf::CircleShape eye(4.5f);
+    eye.setOrigin(4.5f, 4.5f);
+    eye.setPosition(pts[0] + u * 9.f + perp * 4.f);
+    eye.setFillColor(sf::Color::White);
+    w.draw(eye);
+    sf::CircleShape pupil(2.2f);
+    pupil.setOrigin(2.2f, 2.2f);
+    pupil.setPosition(pts[0] + u * 10.f + perp * 4.5f);
+    pupil.setFillColor(sf::Color(30, 30, 30));
+    w.draw(pupil);
+
+    // Язычок
+    drawThickLine(w, pts[0] + u * 18.f, pts[0] + u * 34.f, 2.5f, sf::Color(255, 60, 60));
+}
+
