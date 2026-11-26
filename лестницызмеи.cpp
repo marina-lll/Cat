@@ -27,3 +27,51 @@ void drawLadder(sf::RenderWindow& w, sf::Vector2f a, sf::Vector2f b)
         drawThickLine(w, p + perp * rail, p - perp * rail, 5, WOOD);
     }
 }
+void drawSnake(sf::RenderWindow& w, sf::Vector2f head, sf::Vector2f tail)
+{
+    sf::Vector2f d = tail - head;
+    float len = std::hypot(d.x, d.y);
+    if (len < 2.0f) return;
+    sf::Vector2f u = d / len, perp(-u.y, u.x);
+
+    const int   SEG   = 46;
+    const float waves = 2.6f, amp = 7.0f;
+    std::vector<sf::Vector2f> pts(SEG + 1);
+    for (int i = 0; i <= SEG; ++i)
+    {
+        float s = float(i) / SEG;
+        pts[i] = head + u * (len * s)
+               + perp * (std::sin(s * waves * 2 * PI) * amp);
+    }
+
+    sf::Vector2f sh(3, 4);
+    for (int i = SEG; i >= 0; --i)
+    {
+        float s = float(i) / SEG;
+        float r = (11.f - 4.f * s) + 3.f;
+        sf::CircleShape c(r);
+        c.setOrigin(r, r);
+        c.setPosition(pts[i] + sh);
+        c.setFillColor(sf::Color(0, 0, 0, 40));
+        w.draw(c);
+    }
+    for (int i = SEG; i >= 0; --i)
+    {
+        float s = float(i) / SEG;
+        float r = 11.f - 4.f * s;
+        sf::CircleShape c(r);
+        c.setOrigin(r, r);
+        c.setPosition(pts[i]);
+        c.setFillColor(SNAKE_DARK);
+        w.draw(c);
+    }
+    for (int i = SEG; i >= 0; --i)
+    {
+        float s = float(i) / SEG;
+        float r = 7.5f - 3.f * s;
+        sf::CircleShape c(r);
+        c.setOrigin(r, r);
+        c.setPosition(pts[i]);
+        c.setFillColor(SNAKE_BODY);
+        w.draw(c);
+    }
